@@ -8,6 +8,7 @@ public class BaseController : MonoBehaviour
 
     [SerializeField] private SpriteRenderer characterRenderer; // 프리팹의 스프라이트
     [SerializeField] private Transform weaponPivot; // 프리팹의 무기 위치
+    [SerializeField] private WeaponHandler weaponPrefab; // 가져올 프리팹 무기
 
     protected Vector2 moveDirection = Vector2.zero; // 캐릭터의 이동 방향
     public Vector2 MoveDirection { get { return moveDirection; } }
@@ -18,6 +19,7 @@ public class BaseController : MonoBehaviour
     // 컴포넌트 스크립트
     protected AnimationHandler animationHandler;
     protected StatHandler statHandler;
+    protected WeaponHandler weaponHandler;
 
     protected virtual void Awake()
     {
@@ -26,6 +28,10 @@ public class BaseController : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody2D>();
         animationHandler = GetComponent<AnimationHandler>();
         statHandler = GetComponent<StatHandler>();
+        if(weaponPrefab != null)
+            weaponHandler = Instantiate(weaponPrefab, weaponPivot); // 프리팹이 있다면 무기 핸들러는 무기를 생성한다.
+        else
+            weaponHandler = GetComponentInChildren<WeaponHandler>(); // 프리팹이 없다면 이미 장착중인 무기를 가져온다.
     }
 
     protected virtual void Start()
@@ -36,7 +42,7 @@ public class BaseController : MonoBehaviour
     protected virtual void Update()
     {
         // 바라보기 메서드
-        LookRotate();
+        LookRotate(lookDirection);
         // 입력처리 메서드
     }
 
@@ -53,11 +59,19 @@ public class BaseController : MonoBehaviour
         _rigidbody.velocity = direction;
     }
 
-    private void LookRotate()
+    private void LookRotate(Vector2 lookDirection)
     {
-        if (lookDirection.x < 0)
-            characterRenderer.flipX = true;
-        else
-            characterRenderer.flipX = false;
+        // 라디안 값을 도 값으로 변환한다.
+        // 도 =  라디안 * (180 / 파이)를 하면 된다.
+        // 즉, Mathf.Rad2Deg가 180 / 파이 의 계산을 제공한다.
+        float lookAngle = Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg;
+        bool isLeft = Mathf.Abs(lookAngle) > 90;
+
+        characterRenderer.flipX = isLeft;
+
+        weaponPivot.rotation = Quaternion.Euler(0f, 0f, lookAngle);
+
+        weaponHandler?.WeaponRotate(isLeft); // 무기가 null이 아닐 때, 무기의 좌 우 회전
+
     }
 }
