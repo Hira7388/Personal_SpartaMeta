@@ -36,6 +36,7 @@ public class BaseController : MonoBehaviour
     protected virtual void Update()
     {
         // 바라보기 메서드
+        LookRotate();
         // 입력처리 메서드
     }
 
@@ -49,7 +50,14 @@ public class BaseController : MonoBehaviour
     {
         // 방향에다 속력을 곱해줘서 설정한 이동속보 변수에 따라 속도가 달라지게 한다.
         direction = direction * statHandler.MoveSpeed;
-
         _rigidbody.velocity = direction;
+    }
+
+    private void LookRotate()
+    {
+        if (lookDirection.x < 0)
+            characterRenderer.flipX = true;
+        else
+            characterRenderer.flipX = false;
     }
 }
