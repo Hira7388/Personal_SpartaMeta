@@ -44,7 +44,8 @@ public class PlayerController : BaseController
 
     private void OnFire(InputValue inputValue)
     {
-
+        Debug.Log("플레이어 공격 감지");
+        isAttacking = inputValue.isPressed;
     }
 
     private void OnJump(InputValue inputValue)

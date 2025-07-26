@@ -16,6 +16,9 @@ public class BaseController : MonoBehaviour
     protected Vector2 lookDirection = Vector2.zero; // 캐릭터가 바라보는 방향
     public Vector2 LookDirection { get { return lookDirection; } }
 
+    protected bool isAttacking;
+    private float timeSinceLastAttack = int.MaxValue;  // 0으로 초기화하면 첫 공격에 무기 Delay만큼 기다려야 한다
+
     // 컴포넌트 스크립트
     protected AnimationHandler animationHandler;
     protected StatHandler statHandler;
@@ -43,7 +46,8 @@ public class BaseController : MonoBehaviour
     {
         // 바라보기 메서드
         LookRotate(lookDirection);
-        // 입력처리 메서드
+        // 입력처리 메서드(공격)
+        WeaponHandleAttackDelay();
     }
 
     protected virtual void FixedUpdate()
@@ -72,6 +76,38 @@ public class BaseController : MonoBehaviour
         weaponPivot.rotation = Quaternion.Euler(0f, 0f, lookAngle);
 
         weaponHandler?.WeaponRotate(isLeft); // 무기가 null이 아닐 때, 무기의 좌 우 회전
+    }
 
+    private void WeaponHandleAttackDelay()
+    {
+        if (weaponPrefab == null) // 무기가 없으면 동작하지 않음
+            return;
+
+        if (timeSinceLastAttack <= weaponHandler.AttackDelay) // 아직 무기 딜레이만큼 시간이 흐르지 않았다.
+            timeSinceLastAttack += Time.deltaTime;
+
+        // 테스트용
+        Debug.Log($"isAttacking: {isAttacking}, Time Since Attack: {timeSinceLastAttack}, Delay: {weaponHandler.AttackDelay}");
+
+        if (isAttacking && timeSinceLastAttack  > weaponHandler.AttackDelay) // 무기 딜레이만큼 시간이 흘렀다.
+        {
+            timeSinceLastAttack = 0; // 다시 딜레이를 측정하기 위해 0초로 초기화
+            Attack(); // 공격 시작
+        }
+    }
+
+    private void Attack()
+    {
+        if(lookDirection != Vector2.zero)
+        {
+            Debug.Log("컨트롤러가 무기에게 공격 명령 호출");
+            weaponHandler?.Attack();
+        }
+    }
+
+    public virtual void Death()
+    {
+        Debug.LogError("!!! 캐릭터가 즉시 사망하고 있습니다 !!!");
+        // 이하 생략...
     }
 }

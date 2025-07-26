@@ -71,8 +71,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1910014605
+  m_SortingLayer: 2
   m_SortingOrder: 110
   m_Sprite: {fileID: 21300000, guid: 4394fa906fccfd945a53d119d17409e4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -131,7 +131,7 @@ Transform:
   m_GameObject: {fileID: 4786341805805155080}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.44, y: 0, z: 0}
+  m_LocalPosition: {x: 0.835, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -146,7 +146,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3275944835103102508}
-  - component: {fileID: 1091214792791311345}
+  - component: {fileID: 3735096966774202931}
   m_Layer: 0
   m_Name: P_ Bow_EquipWeapon
   m_TagString: Untagged
@@ -171,7 +171,7 @@ Transform:
   - {fileID: 2346582329049540167}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1091214792791311345
+--- !u!114 &3735096966774202931
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -180,12 +180,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 7614956707737164995}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8adbac63dbb37e34d9c9a1ea89b7dd09, type: 3}
+  m_Script: {fileID: 11500000, guid: 764bcda9ae9ab2641861b15ae160c160, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   attackDelay: 0.5
   weaponSize: 0.8
-  attackPower: 1
+  attackPower: 0.1
   target:
     serializedVersion: 2
     m_Bits: 128
+  projectileSpawnPosition: {fileID: 2346582329049540167}
+  projectileIndex: 0
+  spread: 1
+  multipleProjectileSpread: 1
+  numberProjectilePerShot: 1
