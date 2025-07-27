@@ -61,6 +61,7 @@ public class BaseController : MonoBehaviour
         // 방향에다 속력을 곱해줘서 설정한 이동속보 변수에 따라 속도가 달라지게 한다.
         direction = direction * statHandler.MoveSpeed;
         _rigidbody.velocity = direction;
+        animationHandler.Move(direction);
     }
 
     private void LookRotate(Vector2 lookDirection)
