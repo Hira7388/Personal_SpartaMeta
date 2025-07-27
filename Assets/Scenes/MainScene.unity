@@ -4723,7 +4723,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2244a0ebea37e5541bbb4182b16ab805, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  smoothSpeed: 0.1
+  smoothSpeed: 5
   offset: {x: 0, y: 0, z: -10}
 --- !u!1 &600228946
 GameObject:
@@ -6754,7 +6754,7 @@ GameObject:
   - component: {fileID: 1422168299}
   m_Layer: 8
   m_Name: Collision
-  m_TagString: Untagged
+  m_TagString: BoundaryCollider
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

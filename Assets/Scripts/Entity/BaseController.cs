@@ -87,8 +87,8 @@ public class BaseController : MonoBehaviour
         if (timeSinceLastAttack <= weaponHandler.AttackDelay) // 아직 무기 딜레이만큼 시간이 흐르지 않았다.
             timeSinceLastAttack += Time.deltaTime;
 
-        // 테스트용
-        Debug.Log($"isAttacking: {isAttacking}, Time Since Attack: {timeSinceLastAttack}, Delay: {weaponHandler.AttackDelay}");
+        // 디버그용
+        //Debug.Log($"isAttacking: {isAttacking}, Time Since Attack: {timeSinceLastAttack}, Delay: {weaponHandler.AttackDelay}");
 
         if (isAttacking && timeSinceLastAttack  > weaponHandler.AttackDelay) // 무기 딜레이만큼 시간이 흘렀다.
         {
