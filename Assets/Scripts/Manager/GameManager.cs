@@ -61,12 +61,12 @@ public class GameManager : MonoBehaviour
         if (playerObject != null)
         {
             player = playerObject.transform; // 플레이어가 있는 씬이라면 플레이어의 위치를 가져온다.(카메라 팔로우를 위해)
-            Debug.Log($"{scene.name} 씬 로드 완료. 플레이어를 발견하여 참조합니다.");
+            Debug.Log($"{scene.name} 씬 로드 완료. 플레이어를 발견하여 참조합니다."); // 디버그용
         }
         else
         {
             player = null; // 플레이어가 없다면 null을 넣어서 오류가 발생하지 않게 한다.
-            Debug.Log($"{scene.name} 씬 로드 완료. 플레이어가 없어 참조를 비웁니다.");
+            Debug.Log($"{scene.name} 씬 로드 완료. 플레이어가 없어 참조를 비웁니다."); // 디버그용
         }
     }
 }
