@@ -11,6 +11,7 @@ public class StackController : MonoBehaviour
 
     [Header("게임 설정")]
     [SerializeField] private GameObject blockPrefab;
+    [SerializeField] private Transform blockContainer;
     [SerializeField] private float blockMoveSpeed = 4.0f;
     [SerializeField] private float errorMargin = 0.1f;
     [SerializeField] private float stackMoveSpeed = 5.0f;
@@ -32,17 +33,26 @@ public class StackController : MonoBehaviour
         transform.position = Vector3.Lerp(transform.position, desiredPosition, stackMoveSpeed * Time.deltaTime);
     }
 
+    Color GetRandomColor()
+    {
+        float r = Random.Range(100f, 250f) / 255f;
+        float g = Random.Range(100f, 250f) / 255f;
+        float b = Random.Range(100f, 250f) / 255f;
+
+        return new Color(r, g, b);
+    }
+
     public void StartNewGame()
     {
-        foreach (Transform child in transform) Destroy(child.gameObject);
+        foreach (Transform child in blockContainer) Destroy(child.gameObject);
         currentBlockSize = 10f;
         moveBlockBoundary = currentBlockSize / 2 + 2.5f;
         prevBlockPosition = Vector2.down;
         stackCount = 0;
         desiredPosition = Vector3.zero;
         isGameActive = true;
-        prevColor = Random.ColorHSV();
-        nextColor = Random.ColorHSV();
+        prevColor = GetRandomColor();
+        nextColor = GetRandomColor();
         SpawnNewBlock();
         SpawnNewBlock();
     }
@@ -90,11 +100,12 @@ public class StackController : MonoBehaviour
     private void SpawnNewBlock()
     {
         if (lastBlock != null) prevBlockPosition = lastBlock.transform.position;
-        GameObject newObj = Instantiate(blockPrefab, transform);
+        GameObject newObj = Instantiate(blockPrefab);
         Block newBlock = newObj.GetComponent<Block>();
 
         newObj.transform.position = new Vector2(0, prevBlockPosition.y + 1f);
         newObj.transform.localScale = new Vector3(currentBlockSize, 1, 1);
+        newObj.transform.SetParent(blockContainer);
 
         // 색상 로직
         float lerpT = (stackCount % 11) / 10f;
@@ -104,7 +115,7 @@ public class StackController : MonoBehaviour
         if (lerpT >= 1.0f)
         {
             prevColor = nextColor;
-            nextColor = Random.ColorHSV(0f, 1f, 0.7f, 1f, 0.8f, 1f);
+            nextColor = GetRandomColor();
         }
         Camera.main.backgroundColor = applyColor * 0.6f;
 

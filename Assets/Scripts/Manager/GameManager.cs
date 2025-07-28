@@ -24,6 +24,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Transform player;
     public Transform Player { get =>  player; }
 
+    // 씬 이동 효과 설정
+    [SerializeField] private CanvasGroup fadeOutCanvasGroup;
+    [SerializeField] private float fadeDuration = 0.5f;
 
     private void Awake()
     {
@@ -39,6 +42,8 @@ public class GameManager : MonoBehaviour
             // 씬이 바뀌어도 파괴되지 않게 한다. (모든 씬에서 동일한 정보를 가진 GameManager가 된다.)
             DontDestroyOnLoad(this.gameObject);
         }
+
+        fadeOutCanvasGroup.alpha = 0f;
     }
 
     // 씬 매니저에서 Awake() 다음으로 호출한다.
@@ -69,4 +74,39 @@ public class GameManager : MonoBehaviour
             Debug.Log($"{scene.name} 씬 로드 완료. 플레이어가 없어 참조를 비웁니다."); // 디버그용
         }
     }
+
+    // 외부에서 호출할 씬 전환 메서드
+    public void LoadSceneWithFade(string sceneName)
+    {
+        StartCoroutine(FadeAndLoadScene(sceneName));
+    }
+
+    // 어두워지고 -> 씬을 불러오고 -> 밝아지는 과정
+    private IEnumerator FadeAndLoadScene(string sceneName)
+    {
+        // 페이드 아웃 (점점 어두워짐)
+        yield return StartCoroutine(Fade(1f));
+
+        // 씬 로드
+        yield return SceneManager.LoadSceneAsync(sceneName);
+
+        // 여유 시간
+        yield return null;
+
+        // 페이드 인 (점점 밝아짐)
+        yield return StartCoroutine(Fade(0f));
+    }
+
+    // 어두워지거나 밝아지는 효과
+    private IEnumerator Fade(float targetAlpha)
+    {
+        float speed = Mathf.Abs(fadeOutCanvasGroup.alpha - targetAlpha) / fadeDuration;
+        while (!Mathf.Approximately(fadeOutCanvasGroup.alpha, targetAlpha))
+        {
+            fadeOutCanvasGroup.alpha = Mathf.MoveTowards(fadeOutCanvasGroup.alpha, targetAlpha, speed * Time.deltaTime);
+            yield return null;
+        }
+        fadeOutCanvasGroup.alpha = targetAlpha; // 정확히 목표 값으로 설정
+    }
+
 }
