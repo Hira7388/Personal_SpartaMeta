@@ -18,6 +18,7 @@ public class StackController : MonoBehaviour
     private Block lastBlock;
     private Vector2 prevBlockPosition;
     private float currentBlockSize;
+    private float moveBlockBoundary;
     private bool isGameActive = false;
     private int stackCount = 0;
     private Vector3 desiredPosition;
@@ -34,7 +35,8 @@ public class StackController : MonoBehaviour
     public void StartNewGame()
     {
         foreach (Transform child in transform) Destroy(child.gameObject);
-        currentBlockSize = 3.5f;
+        currentBlockSize = 10f;
+        moveBlockBoundary = currentBlockSize / 2 + 2.5f;
         prevBlockPosition = Vector2.down;
         stackCount = 0;
         desiredPosition = Vector3.zero;
@@ -116,7 +118,7 @@ public class StackController : MonoBehaviour
     private void MoveCurrentBlock()
     {
         if (lastBlock == null) return;
-        float moveRange = 3.5f - (currentBlockSize / 2f);
+        float moveRange = moveBlockBoundary - (currentBlockSize / 2f);
         float positionX = Mathf.PingPong(Time.time * blockMoveSpeed, moveRange * 2) - moveRange;
         Vector3 pos = lastBlock.transform.position;
         pos.x = positionX;
@@ -132,5 +134,6 @@ public class StackController : MonoBehaviour
         rubbleObj.transform.localScale = new Vector3(scale.x, scale.y, 1);
         Rigidbody2D rb = rubbleObj.AddComponent<Rigidbody2D>();
         rb.gravityScale = 3f;
+        rubbleObj.tag = "Rubble"; // 생성된 조각에 "Rubble" 태그를 할당
     }
 }
