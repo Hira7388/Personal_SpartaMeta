@@ -10,25 +10,19 @@ public class FollowCamera : MonoBehaviour
     [SerializeField] private float smoothSpeed = 5f; // 카메라가 부드럽게 따라오는 정도
     [SerializeField] private Vector3 offset = new Vector3(0f, 0f, -10f); // 카메라가 플레이어와 어느정도 거리를 두고 움직인다.
 
-    private Collider2D boundaryCollider;
-    private Bounds bounds; // 경계 영역
+    // 콜라이더를 받아와서 제한 설정을 하려고 했으나 도저히 안되서 임시로 직접 좌표를 받도록 설정.
+    [Header("경계 설정 (직접 입력)")]
+    [SerializeField] private float minX;
+    [SerializeField] private float maxX;
+    [SerializeField] private float minY;
+    [SerializeField] private float maxY;
+
 
     private void Start()
     {
         if(GameManager.Instance != null && GameManager.Instance.Player != null)
         {
             target = GameManager.Instance.Player;
-
-            boundaryCollider = GameObject.FindGameObjectWithTag("BoundaryCollider")?.GetComponent<Collider2D>();
-
-            if (boundaryCollider != null)
-            {
-                bounds = boundaryCollider.bounds;
-            }
-            else
-            {
-                Debug.LogError("BoundaryCollider 태그를 가진 2D 콜라이더를 찾을 수 없습니다!");
-            }
         }
         else
         {
@@ -44,11 +38,19 @@ public class FollowCamera : MonoBehaviour
 
         Vector3 desiredPosition = target.position + offset;
 
-        float clampedX = Mathf.Clamp(desiredPosition.x, bounds.min.x, bounds.max.x);
-        float clampedY = Mathf.Clamp(desiredPosition.y, bounds.min.y, bounds.max.y);
-        Vector3 clampedDesiredPosition = new Vector3(clampedX, clampedY, desiredPosition.z);
+        float clampedX = Mathf.Clamp(desiredPosition.x, minX, maxX);
+        float clampedY = Mathf.Clamp(desiredPosition.y, minY, maxY);
+        Vector3 finalPosition = new Vector3(clampedX, clampedY, desiredPosition.z);
 
-        Vector3 smoothCameraPosition = Vector3.Lerp(transform.position, clampedDesiredPosition,  Time.deltaTime * smoothSpeed);
+        Vector3 smoothCameraPosition = Vector3.Lerp(transform.position, finalPosition, Time.deltaTime * smoothSpeed);
         transform.position = smoothCameraPosition;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Vector3 center = new Vector3((minX + maxX) / 2, (minY + maxY) / 2, 0);
+        Vector3 size = new Vector3(maxX - minX, maxY - minY, 0);
+        Gizmos.DrawWireCube(center, size);
     }
 }
