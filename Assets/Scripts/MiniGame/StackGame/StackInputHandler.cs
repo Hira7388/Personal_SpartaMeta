@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 
@@ -9,22 +10,34 @@ public class InputHandler : MonoBehaviour
     [SerializeField] private StackController stackController;
     [SerializeField] private StackGameManager gameManager;
 
+    private bool blockPlacementRequested = false;
+
     private void OnPlaceBlock(InputValue value)
     {
-        // 어떤 스크립트가, 어떤 게임오브젝트에서 신호를 받았는지 정확히 출력
-        Debug.Log($"[Input Check] GameManager: {gameManager != null}, IsGameOver: {gameManager?.IsGameOver}, isPressed: {value.isPressed}, StackController: {stackController != null}");
+        // 입력이 들어왔다고만 알리는 역할
+        blockPlacementRequested = true;
+    }
 
-        if (gameManager != null && !gameManager.IsGameOver && value.isPressed)
+    private void Update()
+    {
+        if (!blockPlacementRequested)
         {
-            if (stackController != null)
-            {
-                Debug.Log("조건 통과! PlaceBlock()를 호출합니다.");
-                stackController.PlaceBlock();
-            }
-            else
-            {
-                Debug.LogError("stackController가 연결되지 않았습니다!");
-            }
+            return;
+        }
+
+        blockPlacementRequested = false;
+
+        // UI 클릭은 무시
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+            Debug.Log("UI를 클릭했습니다.");
+            return;
+        }
+
+        // 게임 실행
+        if (gameManager != null && !gameManager.IsGameOver)
+        {
+            stackController?.PlaceBlock();
         }
     }
 }

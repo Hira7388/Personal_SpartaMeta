@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 7998821835908525620}
   m_Layer: 6
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -179,7 +179,7 @@ MonoBehaviour:
   m_ActionEvents: []
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: PC
-  m_DefaultActionMap: 8fbc02a0-5f81-4482-8b9e-f0c43c1d7d64
+  m_DefaultActionMap: 697ea096-b7c1-4671-a9ec-71cb878b8829
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!1 &2239056019952408323

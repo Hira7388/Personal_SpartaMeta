@@ -139,9 +139,9 @@
             "actions": [
                 {
                     "name": "PlaceBlock",
-                    "type": "Value",
+                    "type": "Button",
                     "id": "8deb566b-4bed-424e-a0e5-5ad91d3a029a",
-                    "expectedControlType": "",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
